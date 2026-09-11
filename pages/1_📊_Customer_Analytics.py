@@ -8,6 +8,14 @@ from utils.auth import check_authentication, display_user_info
 from utils.data_loader import load_parquet_data, load_gold_data
 from utils.ui_style import apply_custom_theme
 
+def format_compact(value):
+    if value >= 1_000_000:
+        return f"{value/1_000_000:.2f}M $"
+    elif value >= 1_000:
+        return f"{value/1_000:.1f}k $"
+    return f"{value:.0f} $"
+
+
 # Configuration de la page
 st.set_page_config(
     page_title="Customer Analytics & CRM",
@@ -101,7 +109,7 @@ if df_silver is not None and df_gold is not None:
 
         k1, k2, k3, k4, k5, k6 = st.columns(6)
         with k1:
-            st.metric("Chiffre d'Affaires", f"{total_revenue:,.0f} $")
+            st.metric("Chiffre d'Affaires", format_compact(total_revenue))
         with k2:
             st.metric("Clients Uniques", f"{unique_customers:,}")
         with k3:
@@ -111,7 +119,7 @@ if df_silver is not None and df_gold is not None:
         with k5:
             st.metric("CLV Moyenne Prédite", f"{avg_clv:,.2f} $")
         with k6:
-            st.metric("Récence Moyenne", f"{int(avg_recency)} jours")
+            st.metric("Récence Moyenne", f"{int(avg_recency)} jrs")
 
         st.markdown("---")
 
