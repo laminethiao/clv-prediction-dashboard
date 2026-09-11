@@ -87,7 +87,11 @@ if df_silver is not None and df_gold is not None:
         st.markdown("### 📈 Executive KPIs")
 
         total_revenue = df_silver['sales_value'].sum() if 'sales_value' in df_silver.columns else df_silver['SALES_VALUE'].sum() if 'SALES_VALUE' in df_silver.columns else 0
-        total_transactions = df_silver['basket_id'].nunique() if 'basket_id' in df_silver.columns else len(df_silver)
+        total_transactions = (
+            df_silver['basket_id'].nunique() if 'basket_id' in df_silver.columns
+            else df_silver['BASKET_ID'].nunique() if 'BASKET_ID' in df_silver.columns
+            else len(df_silver)
+        )
         unique_customers = df_gold['household_key'].nunique()
         basket_avg = total_revenue / total_transactions if total_transactions > 0 else 0
 
